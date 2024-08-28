@@ -3,7 +3,6 @@ import pytz
 import pandas as pd
 from datetime import datetime
 
-
 """
 脚本介绍：
 这个脚本的目的是从 Reddit 的指定 subreddit 中收集前 100 个热门帖子的数据，并将这些数据写入到一个 CSV 文件中。
@@ -21,26 +20,14 @@ reddit = praw.Reddit(
 # 选择一个 subreddit
 subreddit = reddit.subreddit('EufyCam')
 
-# 设置起始时间和结束时间
-start_time = datetime(2023, 9, 1)
-end_time = datetime(2023, 9, 5)
-
-# 将起始时间和结束时间转换为 Unix 时间戳格式
-start_timestamp = int(start_time.timestamp())
-end_timestamp = int(end_time.timestamp())
-
-# 将起始时间转换为 Reddit API 所需的时间戳格式
-start_timestamp = int(start_time.timestamp())
-
 # 写入到dataframe中
-df = pd.DataFrame(columns=['Title', 'Score', 'POST_ID', 'URL', 'Text', 'Comments', 'Timestamp'])
+df = pd.DataFrame(columns=['Title', 'Score', 'Post_ID', 'URL', 'Text', 'Comments', 'Timestamp'])
 
 # 用于存储所有帖子的列表
 all_posts = []
 
 # 获取前 100 个热门帖子
 for submission in subreddit.new(limit=None):
-
     """
     for 循环用于遍历 subreddit 中指定时间段内的所有帖子
     将每个帖子的相关信息存储在一个名为 dict 的字典中
@@ -50,7 +37,7 @@ for submission in subreddit.new(limit=None):
     post_dict = {
         'Title': submission.title,
         'Score': submission.score,
-        'POST_ID': submission.id,
+        'Post_ID': submission.id,
         'URL': submission.url,
         'Text': submission.selftext,
         'Comments': submission.num_comments,
@@ -65,4 +52,4 @@ df = pd.DataFrame(all_posts)
 df['Text'] = df['Text'].apply(lambda x: str(x).replace('\n', ' '))
 
 # 将数据保存到 CSV 文件中
-df.to_csv('hot_posts.csv', index=False)
+df.to_csv('posts.csv', index=False)

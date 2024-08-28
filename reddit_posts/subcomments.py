@@ -1,15 +1,19 @@
 import praw
 import pandas as pd
 
+post_id = '1f13b5f'
+client_id='rE_BWSQJPWyu5W7tP1keYw'
+client_secret='Cd9uxRBwh5LnNsfxWdyGGIJJAX9Z9g'
+user_agent='windows:aPigeon:1.0 (by /u/AP1g3on)'
+
 # 创建 Reddit 实例
 reddit = praw.Reddit(
-    client_id='rE_BWSQJPWyu5W7tP1keYw',
-    client_secret='Cd9uxRBwh5LnNsfxWdyGGIJJAX9Z9g',
-    user_agent='windows:aPigeon:1.0 (by /u/AP1g3on)'
+    client_id=client_id,
+    client_secret=client_secret,
+    user_agent=user_agent
 )
 
 # 使用帖子的 ID 获取特定帖子
-post_id = '1f13b5f'  # 替换为实际的 POST_ID
 submission = reddit.submission(id=post_id)
 
 # 获取评论
@@ -38,10 +42,6 @@ def process_comment(comment, parent_id=None):
 # 遍历顶级评论
 for top_level_comment in submission.comments:
     process_comment(top_level_comment)
-
 df['Body'] = df['Body'].apply(lambda x: str(x).replace('\n', ' '))
-# 打印 DataFrame
-print(df)
 
-# 将 DataFrame 保存为 CSV 文件
-df.to_csv('comments.csv', index=False)
+df.to_csv('subcomments.csv', index=False)
